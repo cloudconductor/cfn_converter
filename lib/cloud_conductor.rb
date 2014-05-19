@@ -12,14 +12,5 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-module CloudClient
-  module Adapters
-    describe AbstractAdapter do
-      describe '#new' do
-        it 'raise exception when instantiate abstract class' do
-          expect { AbstractAdapter.new }.to raise_error
-        end
-      end
-    end
-  end
+module CloudConductor
 end
