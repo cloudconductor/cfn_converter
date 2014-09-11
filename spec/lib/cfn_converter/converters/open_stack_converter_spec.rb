@@ -44,7 +44,7 @@ module CfnConverter
           expect_patches << Patches::AddCFNCredentials
 
           expect_patches.each do |patch_class|
-            double = double(patch_class.class_name)
+            double = double(patch_class.name.demodulize)
             expect(double).to receive(:need?).at_least(1).times.and_return(true)
             expect(double).to receive(:apply).at_least(1).times.and_return({})
 

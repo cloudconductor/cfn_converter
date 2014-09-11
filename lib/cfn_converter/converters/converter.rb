@@ -27,14 +27,14 @@ module CfnConverter
           loop do
             break unless original.reject! do |patch|
               available = patch.dependencies.all? do |dependency|
-                !original.map(&:class).map(&:class_name).map(&:to_sym).include? dependency
+                !original.map(&:class).map(&:name).map(&:demodulize).map(&:to_sym).include? dependency
               end
               results << patch if available
             end
           end
 
           unless original.empty?
-            reasons = original.map(&:class).map(&:class_name).join(', ')
+            reasons = original.map(&:class).map(&:name).map(&:demodulize).join(', ')
             fail "Circular dependencies [#{reasons}]"
           end
 
