@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # Copyright 2014 TIS Inc.
 #
@@ -13,15 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-if ARGV.size != 1
-  puts "Usage: cfn2heat cloudformation_template_filename"
-  exit 1
+module CfnConverter
+  class CLI
+    def self.execute(classname, filename)
+      clazz = classname.classify.constantize
+      template = JSON.load(File.open(filename)).with_indifferent_access
+      clazz.new.convert(template, {}).to_json
+    end
+  end
 end
-
-CLASS_NAME = "CfnConverter::Converters::OpenStackConverter"
-
-$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
-
-require "helpers/loader"
-
-puts CfnConverter::CLI.execute(CLASS_NAME, ARGV[0])
