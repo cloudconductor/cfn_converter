@@ -39,8 +39,8 @@ module CfnConverter
           patch1 = Patches::RemoveRoute.new
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          patch1.should_receive(:ensure).and_call_original
-          patch2.should_receive(:ensure).and_call_original
+          expect(patch1).to receive(:ensure).and_call_original
+          expect(patch2).to receive(:ensure).and_call_original
 
           @converter.add_patch patch1
           @converter.add_patch patch2
@@ -51,8 +51,8 @@ module CfnConverter
           patch1 = Patches::RemoveRoute.new
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          patch1.should_receive(:apply).and_return({})
-          patch2.should_receive(:apply).and_return({})
+          expect(patch1).to receive(:apply).and_return({})
+          expect(patch2).to receive(:apply).and_return({})
 
           @converter.add_patch patch1
           @converter.add_patch patch2
@@ -73,8 +73,8 @@ module CfnConverter
           patch1 = Patches::DummyPatch.new
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          patch1.should_not_receive(:apply)
-          patch2.should_receive(:apply)
+          expect(patch1).not_to receive(:apply)
+          expect(patch2).to receive(:apply)
 
           @converter.add_patch patch1
           @converter.add_patch patch2

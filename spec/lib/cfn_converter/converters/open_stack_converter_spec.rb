@@ -48,8 +48,8 @@ module CfnConverter
             expect(double).to receive(:need?).at_least(1).times.and_return(true)
             expect(double).to receive(:apply).at_least(1).times.and_return({})
 
-            patch_class.any_instance.stub(:need?) { double.need? }
-            patch_class.any_instance.stub(:apply) { double.apply }
+            allow_any_instance_of(patch_class).to receive(:need?) { double.need? }
+            allow_any_instance_of(patch_class).to receive(:apply) { double.apply }
           end
 
           converter = OpenStackConverter.new
