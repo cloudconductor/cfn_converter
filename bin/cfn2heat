@@ -1,5 +1,5 @@
-#!/bin/bash
-
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 # Copyright 2014 TIS Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,14 +13,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-SCRIPT_NAME="cfnconv"
-CLASS_NAME="CfnConverter::Converters::OpenStackConverter"
-BIN_DIR=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-
-if [ $# -ne 1 ]; then
-  echo "Usage:$0 cloudformation_template_filename"
+if ARGV.size != 1
+  puts "Usage: cfn2heat cloudformation_template_filename"
   exit 1
-fi
+end
 
-${BIN_DIR}/${SCRIPT_NAME} ${CLASS_NAME} $@
+CLASS_NAME = "CfnConverter::Converters::OpenStackConverter"
+
+$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
+
+require "helpers/loader"
+
+puts CfnConverter::CLI.execute(CLASS_NAME, ARGV[0])
