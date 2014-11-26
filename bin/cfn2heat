@@ -18,10 +18,7 @@ if ARGV.size != 1
   exit 1
 end
 
+require 'cfn_converter'
+
 CLASS_NAME = "CfnConverter::Converters::OpenStackConverter"
-
-$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), "..", "lib"))
-
-require "helpers/loader"
-
 puts CfnConverter::CLI.execute(CLASS_NAME, ARGV[0])

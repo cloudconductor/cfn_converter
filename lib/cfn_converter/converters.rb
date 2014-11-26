@@ -16,3 +16,7 @@ module CfnConverter
   module Converters
   end
 end
+
+Dir.glob File.expand_path('../converters/*.rb', __FILE__) do |path|
+  require path
+end

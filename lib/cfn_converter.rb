@@ -12,7 +12,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-require "cfn_converter/version"
+require 'active_support'
+require 'active_support/core_ext'
+require 'cfn_converter/version'
+require 'cfn_converter/cli'
+require 'cfn_converter/patches'
+require 'cfn_converter/converters'
 
 module CfnConverter
 end
