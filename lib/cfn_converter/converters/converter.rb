@@ -55,6 +55,11 @@ module CfnConverter
         template
       end
 
+      def convert_from_file(file_name, parameters)
+        template = File.open(file_name).read
+        convert(template, parameters)
+      end
+
       def add_patch(patch)
         @patches << patch
       end
