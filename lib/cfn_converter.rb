@@ -15,7 +15,6 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'cfn_converter/version'
-require 'cfn_converter/cli'
 require 'cfn_converter/patches'
 require 'cfn_converter/converters'
 
