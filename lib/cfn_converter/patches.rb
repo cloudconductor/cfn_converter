@@ -16,3 +16,10 @@ module CfnConverter
   module Patches
   end
 end
+
+require 'cfn_converter/patches/patch'
+require 'cfn_converter/patches/patch_utils'
+
+Dir.glob File.expand_path('../patches/*.rb', __FILE__) do |path|
+  require path
+end

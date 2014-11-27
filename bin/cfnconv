@@ -18,8 +18,6 @@ if ARGV.size != 2
   exit 1
 end
 
-$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
-
-require 'helpers/loader'
+require 'cfn_converter'
 
 puts CfnConverter::CLI.execute(ARGV[0], ARGV[1])
