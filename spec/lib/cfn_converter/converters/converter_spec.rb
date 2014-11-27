@@ -12,8 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-require "spec_helper"
-
 module CfnConverter
   module Converters
     describe Converter do
@@ -27,7 +25,7 @@ module CfnConverter
         end
 
         it 'return patches that are appended by #add_patch' do
-          @converter.add_patch Patches::RemoveRoute.new
+          @converter.add_patch Patches::RemoveResource.new 'dummy_resource'
           @converter.add_patch Patches::RemoveProperty.new 'Dummy', 'Dummy'
           expect(@converter.patches.size).to eq(2)
           expect(@converter.patches.all? { |patch| patch.is_a? Patches::Patch }).to be_truthy
@@ -36,11 +34,11 @@ module CfnConverter
 
       describe '#convert' do
         it 'call Patch#ensure on added patches' do
-          patch1 = Patches::RemoveRoute.new
+          patch1 = Patches::RemoveResource.new 'dummy_resource'
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          expect(patch1).to receive(:ensure).and_call_original
-          expect(patch2).to receive(:ensure).and_call_original
+          patch1.should_receive(:ensure).and_call_original
+          patch2.should_receive(:ensure).and_call_original
 
           @converter.add_patch patch1
           @converter.add_patch patch2
@@ -48,11 +46,11 @@ module CfnConverter
         end
 
         it 'call Patch#apply on added patches' do
-          patch1 = Patches::RemoveRoute.new
+          patch1 = Patches::RemoveResource.new 'dummy_resource'
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          expect(patch1).to receive(:apply).and_return({})
-          expect(patch2).to receive(:apply).and_return({})
+          patch1.should_receive(:apply).and_return({})
+          patch2.should_receive(:apply).and_return({})
 
           @converter.add_patch patch1
           @converter.add_patch patch2
@@ -60,8 +58,7 @@ module CfnConverter
         end
 
         it 'doesn\'t call Patch#apply if Patch#need? return false' do
-          # rubocop:disable ClassAndModuleChildren
-          class Patches::DummyPatch < Patches::Patch
+          class Patches::DummyPatch < Patches::Patch # rubocop:disable ClassAndModuleChildren
             def initialize
             end
 
@@ -73,8 +70,8 @@ module CfnConverter
           patch1 = Patches::DummyPatch.new
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          expect(patch1).not_to receive(:apply)
-          expect(patch2).to receive(:apply)
+          patch1.should_not_receive(:apply)
+          patch2.should_receive(:apply)
 
           @converter.add_patch patch1
           @converter.add_patch patch2
