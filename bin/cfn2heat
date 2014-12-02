@@ -21,4 +21,4 @@ end
 require 'cfn_converter'
 
 CLASS_NAME = 'CfnConverter::Converters::OpenStackConverter'
-puts CfnConverter::CLI.execute(CLASS_NAME, ARGV[0])
+puts CfnConverter.create_converter(CLASS_NAME).convert_from_file(ARGV[0], {}).to_json

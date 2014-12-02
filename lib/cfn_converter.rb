@@ -15,9 +15,28 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'cfn_converter/version'
-require 'cfn_converter/cli'
 require 'cfn_converter/patches'
 require 'cfn_converter/converters'
 
 module CfnConverter
+  def self.create_converter(converter)
+    case converter
+    when Symbol then create_converter_from_type(converter)
+    when String then create_converter_from_class_name(converter)
+    else fail "Unsupported type(#{converter.class})"
+    end
+  end
+
+  private
+
+  def self.create_converter_from_type(type)
+    case type
+    when :heat, :open_stack, :openstack then CfnConverter::Converters::OpenStackConverter.new
+    else fail "Unsupported converter type(#{type})"
+    end
+  end
+
+  def self.create_converter_from_class_name(class_name)
+    class_name.classify.constantize.new
+  end
 end

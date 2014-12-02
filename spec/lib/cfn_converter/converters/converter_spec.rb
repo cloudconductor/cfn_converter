@@ -79,6 +79,24 @@ module CfnConverter
         end
       end
 
+      describe '#convert_from_file' do
+        before do
+          File.stub_chain(:open, :read).and_return('{ "dummy_key": "dummy_value" }')
+        end
+
+        it 'call File open and read' do
+          File.should_receive(:open).with('dummy_template.json')
+
+          @converter.convert_from_file('dummy_template.json', {})
+        end
+
+        it 'call convert' do
+          @converter.should_receive(:convert).with('{ "dummy_key": "dummy_value" }', parameter_key: 'parameter_value')
+
+          @converter.convert_from_file('dummy_template.json', parameter_key: 'parameter_value')
+        end
+      end
+
       describe '#ensure_hash' do
         it 'doesn\'t affect argument if argument is already hash' do
           template = {}
