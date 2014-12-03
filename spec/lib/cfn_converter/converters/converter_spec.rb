@@ -37,8 +37,8 @@ module CfnConverter
           patch1 = Patches::RemoveResource.new 'dummy_resource'
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          patch1.should_receive(:ensure).and_call_original
-          patch2.should_receive(:ensure).and_call_original
+          expect(patch1).to receive(:ensure).and_call_original
+          expect(patch2).to receive(:ensure).and_call_original
 
           @converter.add_patch patch1
           @converter.add_patch patch2
@@ -49,8 +49,8 @@ module CfnConverter
           patch1 = Patches::RemoveResource.new 'dummy_resource'
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          patch1.should_receive(:apply).and_return({})
-          patch2.should_receive(:apply).and_return({})
+          expect(patch1).to receive(:apply).and_return({})
+          expect(patch2).to receive(:apply).and_return({})
 
           @converter.add_patch patch1
           @converter.add_patch patch2
@@ -70,8 +70,8 @@ module CfnConverter
           patch1 = Patches::DummyPatch.new
           patch2 = Patches::RemoveProperty.new 'Dummy', 'Dummy'
 
-          patch1.should_not_receive(:apply)
-          patch2.should_receive(:apply)
+          expect(patch1).not_to receive(:apply)
+          expect(patch2).to receive(:apply)
 
           @converter.add_patch patch1
           @converter.add_patch patch2
@@ -81,17 +81,17 @@ module CfnConverter
 
       describe '#convert_from_file' do
         before do
-          File.stub_chain(:open, :read).and_return('{ "dummy_key": "dummy_value" }')
+          allow(File).to receive_message_chain(:open, :read).and_return('{ "dummy_key": "dummy_value" }')
         end
 
         it 'call File open and read' do
-          File.should_receive(:open).with('dummy_template.json')
+          expect(File).to receive(:open).with('dummy_template.json')
 
           @converter.convert_from_file('dummy_template.json', {})
         end
 
         it 'call convert' do
-          @converter.should_receive(:convert).with('{ "dummy_key": "dummy_value" }', parameter_key: 'parameter_value')
+          expect(@converter).to receive(:convert).with('{ "dummy_key": "dummy_value" }', parameter_key: 'parameter_value')
 
           @converter.convert_from_file('dummy_template.json', parameter_key: 'parameter_value')
         end
