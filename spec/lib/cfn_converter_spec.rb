@@ -1,13 +1,13 @@
 describe CfnConverter do
   describe '.create_converter' do
     it 'call createConverterFromType if argument class is Symbol' do
-      CfnConverter.should_receive(:create_converter_from_type)
+      expect(CfnConverter).to receive(:create_converter_from_type)
 
       CfnConverter.create_converter(:dummy)
     end
 
     it 'call createConverterFromClassName if argument class is String' do
-      CfnConverter.should_receive(:create_converter_from_class_name)
+      expect(CfnConverter).to receive(:create_converter_from_class_name)
 
       CfnConverter.create_converter('dummy')
     end
