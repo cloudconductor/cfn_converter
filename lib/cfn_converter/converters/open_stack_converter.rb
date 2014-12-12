@@ -190,10 +190,16 @@ module CfnConverter
       # Remove unimplemented properties from LoadBalancer
       def remove_load_balancer_properties
         properties = []
+        properties << :AccessLoggingPolicy
         properties << :AppCookieStickinessPolicy
+        properties << :ConnectionDrainingPolicy
+        properties << :CrossZone
         properties << :LBCookieStickinessPolicy
+        properties << :LoadBalancerName
         properties << 'Listeners.PolicyNames'
         properties << 'Listeners.SSLCertificateId '
+        properties << :Policies
+        properties << :Scheme
         properties << :SecurityGroups
         properties << :Subnets
         add_patch Patches::RemoveProperty.new 'AWS::ElasticLoadBalancing::LoadBalancer', properties
