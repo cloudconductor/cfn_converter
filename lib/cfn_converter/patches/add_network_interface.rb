@@ -41,9 +41,9 @@ module CfnConverter
       def apply(template, _parameters)
         template = template.deep_dup
 
-        template[:Resources].select(&type?('AWS::EC2::Instance')).map do |_key, instance|
+        template[:Resources].select(&type?('AWS::EC2::Instance')).map do |instance_name, instance|
           next if instance[:Properties].nil? || instance[:Properties][:NetworkInterfaces].nil?
-          instance[:Properties][:NetworkInterfaces].each do |network_interface|
+          instance[:Properties][:NetworkInterfaces].each_with_index do |network_interface, index|
             next unless network_interface[:NetworkInterfaceId].nil?
 
             properties = network_interface.slice(*PORTABLE_PROPERTIES)
@@ -60,7 +60,7 @@ module CfnConverter
             nic[:Properties].update properties
             network_interface.except!(*DELETE_PROPERTIES)
 
-            key = SecureRandom.uuid
+            key = "#{instance_name}NetworkInterface#{index + 1}"
             template[:Resources].update(key => nic)
             network_interface.update(NetworkInterfaceId: { Ref: key })
           end
